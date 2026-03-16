@@ -8,7 +8,7 @@ for i in range (NbRow):
 def GO ():
 
     if Cellule.get_start() == 1:
-        Cellule.avence()
+        Cellule.avance()
 
         root.after(vitesse.get(), GO)
     elif Cellule.get_start() == 2:

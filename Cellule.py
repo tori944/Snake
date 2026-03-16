@@ -108,7 +108,7 @@ class Cellule :
             Cellule.poser_pomme()
         cel.set_etat(2)    
 
-    def avence ():
+    def avance ():
         global NbColumn
 
         val = Cellule.get_direction()
@@ -146,25 +146,16 @@ class Cellule :
                 cel = Cellule.listeCellules[Cellule.listeCellulesSnake[0]]
                 cel.set_etat(0)
                 del Cellule.listeCellulesSnake[0]
-
-            # if (Cellule.get_length() % 5) == 0:
-            #     if vitesse.get() > 20:
-                
-            #         Cellule.set_vitess()
             
         else: 
             Cellule.end()
 
 
     def clavier(event):
-        global startInit
         touche = event.keysym
 
-        if Cellule.get_start() == 0:
+        if Cellule.get_start() == 0:    # si on clic pour la première fois
             Cellule.set_start(1)
-
-        # if startInit == 0:
-        #     startInit = 1
 
         if touche == "Down":
             Cellule.set_direction(1)
@@ -173,12 +164,7 @@ class Cellule :
             Cellule.set_direction(3)
 
         elif touche == "Left":
-            Cellule.set_direction(2)    
+            Cellule.set_direction(2)
             
         elif touche == "Up":
             Cellule.set_direction(0)
-
-
-
-
-  
