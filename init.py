@@ -11,10 +11,13 @@ root.title("Snake")
 taille = IntVar()
 taille.set(1)
 
+running = False
+
+# startInit = 0  # 0 : en attente de commencer / 1 : en jeu / 2 : perdu, fin
 
 # vitesse en fonction du nombre de pomme avalé ou du temps passé ?
 
-vit = 150
+vit = 100
 
 vitesse = IntVar()
 vitesse.set(vit)
