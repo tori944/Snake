@@ -51,10 +51,7 @@ class Cellule :
 
     def get_id (self):
         return self.id 
-    
-    # def get_row (self):
-    #     return self.row
-    
+
     def get_column (self):
         return self.column
     
@@ -75,11 +72,11 @@ class Cellule :
 
     def set_etat (self, val):
         self.etat = val
-        if val == 1 :# serpent
-            canvas.itemconfig(self.rec, fill="green", outline="")
-        elif val == 0 : # rien
+        if val == 0:        # Vide
             canvas.itemconfig(self.rec, fill="black", outline="gray")
-        elif val == 2: # pomme
+        elif val == 1 :     # serpent
+            canvas.itemconfig(self.rec, fill="green", outline="")
+        elif val == 2:      # pomme
             canvas.itemconfig(self.rec, fill="red", outline="")
 
     def set_length():
@@ -95,29 +92,27 @@ class Cellule :
 
             
     def end ():
-        global running, startInit 
-        # print("perdu")
         canvas.create_text(400, 250, text="Perdu !", fill="pink", font=("", 70), tags="message")
-        # startInit = 2
         Cellule.set_start(2)
-        # running = False
+        return
     
     def poser_pomme ():
         cel = choice(Cellule.listeCellules)
-        if cel in Cellule.listeCellulesSnake:
+        #if cel in Cellule.listeCellulesSnake: # récuperer l'emplacement de la dernière celulle du serpent redevenu vide pour ne pas placer la pomme ici
+        if cel.get_etat() == 1:
             Cellule.poser_pomme()
         cel.set_etat(2)    
 
     def avance ():
         global NbColumn
 
-        val = Cellule.get_direction()
+        valDirection = Cellule.get_direction()
 
-        idVoisineDirecte = [-NbColumn, NbColumn, -1, 1]  # haut / bas / gauche / droite
+        idVoisineDirecte = [-NbColumn, NbColumn, -1, 1]  # haut / bas / gauche / droite  # ce ne sont pas tout à fait les id des voisines mais ce qu'il faut ajouter à notre id pour trouver les voisines
 
         # prendre l'id de la celulle tête du Serpent
-        idCel = Cellule.listeCellulesSnake[-1]
-        tete = Cellule.listeCellules[idCel] 
+        idCel = Cellule.listeCellulesSnake[-1]  # dernier id de cellule du serpent
+        tete = Cellule.listeCellules[idCel]     # 
 
         if (tete.get_column() == 0 and Cellule.direction == 2) or (tete.get_column() == NbColumn-1 and Cellule.direction == 3): 
             # si le serpent ce cogne à gauche ou a droite
@@ -125,24 +120,24 @@ class Cellule :
             return
 
         # id de la voisine qui va devenir tête est compris entre 0 et la taille de la liste de cellule, donc ne dépasse ni en haut, ni en bas
-        if 0 <= (idCel+idVoisineDirecte[val]) <= len(Cellule.listeCellules):
+        if 0 <= (idCel+idVoisineDirecte[valDirection]) < len(Cellule.listeCellules):
 
-            cel = Cellule.listeCellules[idCel+idVoisineDirecte[val]]  # Cellule suivante va devenir tête
+            cel = Cellule.listeCellules[idCel+idVoisineDirecte[valDirection]]  # Cellule suivante va devenir tête
 
-            # if cel.get_column() == 0:
-            #     Cellule.end()
-            #     return
+            if cel.get_etat() == 1 :
+                print("on ce marche dessus ! ")
+                Cellule.end()
+                return
             
-            if cel.get_etat() == 2 :#si c'est une pomme
-                Cellule.set_length() #ajouter 1 à la taille
+            if cel.get_etat() == 2 :    # si c'est une pomme
+                Cellule.set_length()    # ajouter 1 à la taille
                 Cellule.poser_pomme()
                 taille.set(Cellule.get_length())
 
             Cellule.listeCellulesSnake.append(cel.get_id())
             cel.set_etat(1)
             
-            
-            if len(Cellule.listeCellulesSnake) > Cellule.get_length(): #Cellule.get_length(): # si on a atteint la taille du serpent (de 4)
+            if len(Cellule.listeCellulesSnake) > Cellule.get_length(): # Cellule.get_length(): # si on a atteint la taille du serpent (de 4)
                 cel = Cellule.listeCellules[Cellule.listeCellulesSnake[0]]
                 cel.set_etat(0)
                 del Cellule.listeCellulesSnake[0]

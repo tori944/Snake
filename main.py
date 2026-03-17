@@ -3,14 +3,23 @@ from Cellule import *
 for i in range (NbRow):
     for j in range (NbColumn):
         Cellule(j*sizeCel, i*sizeCel, i, j)
-    
+
+varChange = 0 # var qui augmente lorqusque qu'on change la vitesse
 
 def GO ():
+    global vit, varChange
 
     if Cellule.get_start() == 1:
         Cellule.avance()
 
+        if vit > 40 :
+            if Cellule.get_length() % 5 == 0 and varChange != Cellule.get_length():
+                vit -= 5
+                varChange += 5
+                vitesse.set(vit)
+
         root.after(vitesse.get(), GO)
+
     elif Cellule.get_start() == 2:
         return
 
@@ -21,9 +30,8 @@ def onCommence ():
     else:
         root.after(50, onCommence)
 
-
 def rejouer (): 
-    global taille
+    global taille, vit, vitesse, varChange
 
     if Cellule.get_start() == 0:
         return
@@ -50,6 +58,10 @@ def rejouer ():
         taille.set(Cellule.get_length()) # = 1
 
         canvas.delete("message")
+
+        vitesse.set(100)
+        vit = 100
+        varChange = 0
 
 
 

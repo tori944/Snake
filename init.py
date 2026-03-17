@@ -18,7 +18,6 @@ running = False
 # vitesse en fonction du nombre de pomme avalé ou du temps passé ?
 
 vit = 100
-
 vitesse = IntVar()
 vitesse.set(vit)
 
